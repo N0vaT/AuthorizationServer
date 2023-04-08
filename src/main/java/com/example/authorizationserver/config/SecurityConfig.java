@@ -2,7 +2,6 @@ package com.example.authorizationserver.config;
 
 import com.example.authorizationserver.model.User;
 import com.example.authorizationserver.repository.UserRepository;
-import com.example.authorizationserver.services.UserService;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,8 +24,8 @@ public class SecurityConfig{
                 .and().build();
     }
     @Bean
-    UserDetailsService userDetailsService(UserService userService) {
-        return username -> userService.loadUserByUsername(username);
+    UserDetailsService userDetailsService(UserRepository userRepository) {
+        return username -> userRepository.findByUsername(username).orElse(null);
     }
     @Bean
     public PasswordEncoder passwordEncoder() {
